@@ -1,0 +1,13 @@
+# Docker data
+odoo_data/
+odoo_addons/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# SQL logs
+*.log

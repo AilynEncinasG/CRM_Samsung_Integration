@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  # Base de datos para Odoo
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    networks:
+      - crm-network
+
+  # El sistema Odoo
+  odoo:
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./odoo_data:/var/lib/odoo
+      - ./odoo_addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    networks:
+      - crm-network
+
+  # SQL Server para la base de Samsung
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=160305Encinas+
+    ports:
+      - "1433:1433"
+    networks:
+      - crm-network
+
+networks:
+  crm-network:
+    driver: bridge
