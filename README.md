@@ -43,7 +43,7 @@ Instalar el módulo de Contactos.
 ### 3. Inicialización de la Base de Datos y DW
 Para crear las tablas, relaciones y el Data Warehouse, ejecuta el script SQL:
 ```PowerShell
-docker exec -it crm-sqlserver-1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '160305Encinas+' -C -Q "$(Get-Content completo_samsung.sql -Raw)"
+docker exec -it crm-sqlserver-1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Contraseña' -C -Q "$(Get-Content completo_samsung.sql -Raw)"
 ```
 ### 4. Sincronización de Datos
 Ejecuta el script de integración para migrar registros desde Odoo hacia SQL Server:
