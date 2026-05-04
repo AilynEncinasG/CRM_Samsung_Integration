@@ -31,46 +31,36 @@ El ecosistema completo vive dentro de contenedores Docker, asegurando portabilid
 Desde la carpeta raíz, ejecuta:
 ```bash
 docker-compose up -d
-
-2. Configuración de Odoo
+```
+### 2. Configuración de Odoo
+```bash
 Acceder a http://localhost:8069.
-
-Crear base de datos: samsung_crm.
+```
+Crear base de datos: ```bash samsung_crm ```
 
 Instalar el módulo de Contactos.
 
-3. Inicialización de la Base de Datos y DW
+### 3. Inicialización de la Base de Datos y DW
 Para crear las tablas, relaciones y el Data Warehouse, ejecuta el script SQL:
-
-PowerShell
+```PowerShell
 docker exec -it crm-sqlserver-1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '160305Encinas+' -C -Q "$(Get-Content completo_samsung.sql -Raw)"
-4. Sincronización de Datos
+```
+### 4. Sincronización de Datos
 Ejecuta el script de integración para migrar registros desde Odoo hacia SQL Server:
 
-Bash
+```bash
 python sincronizar_crm.py
-🤖 Automatización ETL
+```
+### 🤖 Automatización ETL
 Se ha implementado un SQL Server Agent Job que garantiza que el Data Warehouse esté siempre actualizado. El proceso se ejecuta cada 5 minutos y realiza las siguientes tareas:
-
-Extracción: Captura nuevos registros de samsung_electronics.
-
-Transformación: Limpieza de datos y concatenación de nombres/apellidos.
-
-Carga: Inserción en Dim_Cliente manteniendo la trazabilidad con ID_Original.
-
+* ***Extracción:** Captura nuevos registros de samsung_electronics.
+* ***Transformación:** Limpieza de datos y concatenación de nombres/apellidos.
+* ***Carga:** Inserción en Dim_Cliente manteniendo la trazabilidad con ID_Original.
 Comando para ejecución manual del Job:
-
-SQL
+```SQL
 EXEC msdb.dbo.sp_start_job N'Sincronizacion_Samsung_Automatico';
-🎓 Aplicación Académica e Investigación
-Este proyecto sirve como núcleo técnico para investigaciones avanzadas en la Universidad del Valle (Univalle), La Paz:
+```
 
-London Travel: Aplicación de algoritmos K-means sobre el Data Warehouse para optimizar rutas turísticas.
+### Desarrollado por: Ailyn Lenny Encinas Gutierrez y Denilson Asis Saavedra Mamani
 
-Clínica San Juan de Dios: Modelo base para la gestión de imágenes médicas y datos de pacientes mediante redes neuronales.
-
-Tecnologías Emergentes: Implementación de arquitecturas distribuidas y contenedores.
-
-Desarrollado por: Ailyn Lenny Encinas Gutierrez
-
-Carrera: Ingeniería de Sistemas e Informática (ISI) - Univalle
+### Carrera: Ingeniería de Sistemas e Informática (ISI) - Univalle
