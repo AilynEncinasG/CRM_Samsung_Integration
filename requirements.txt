@@ -1,5 +1,6 @@
 django
-psycopg2-binary
 pyodbc
+psycopg2-binary
 django-cors-headers
 djangorestframework
+django-mssql-backend
