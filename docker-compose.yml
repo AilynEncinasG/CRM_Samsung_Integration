@@ -1,4 +1,5 @@
 version: '3.1'
+
 services:
   # Base de datos para Odoo
   db:
@@ -35,6 +36,43 @@ services:
       - MSSQL_SA_PASSWORD=160305Encinas+
     ports:
       - "1433:1433"
+    networks:
+      - crm-network
+
+  # --- NUEVO SERVICIO: DJANGO ---
+  django:
+    build: .
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - SQL_SERVER_HOST=sqlserver
+      - SQL_SERVER_USER=sa
+      - SQL_SERVER_PASSWORD=160305Encinas+
+      - ODOO_DB_HOST=db
+    depends_on:
+      - sqlserver
+      - db
+    networks:
+      - crm-network
+  frontend:
+    image: node:20-alpine
+    container_name: react_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && HOST=0.0.0.0 npm start"
+    environment:
+      - WDS_SOCKET_PORT=0
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
     networks:
       - crm-network
 

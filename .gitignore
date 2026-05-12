@@ -1,13 +1,38 @@
-# Docker data
 odoo_data/
+odoo_db_data/
+mssql_data/
+
+# --- Odoo ---
 odoo_addons/
 
-# Python
+# --- Python / Django ---
 __pycache__/
 *.py[cod]
 *$py.class
 .venv/
 venv/
+env/
+db.sqlite3
+# Archivos de medios y estáticos recolectados
+media/
+static/
 
-# SQL logs
+# --- React (Frontend) ---
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Logs y Temporales ---
 *.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+*.tmp
