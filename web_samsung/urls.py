@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from web_samsung.views import estado_sistema
+from web_samsung.views import estado_sistema, login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/estado/', estado_sistema),
+    path('api/login/', login_view),
 ]
