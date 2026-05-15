@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  # Base de datos para Odoo
+  # Base de datos para Odoo (Esta se queda porque Odoo la necesita local)
   db:
     image: postgres:15
     environment:
@@ -28,36 +28,23 @@ services:
     networks:
       - crm-network
 
-  # SQL Server para la base de Samsung
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=160305Encinas+
-    ports:
-      - "1433:1433"
-    networks:
-      - crm-network
-
-  # --- NUEVO SERVICIO: DJANGO ---
+  # --- DJANGO CONFIGURADO PARA SOMEE ---
   django:
     build: .
     container_name: django_app
+    env_file:
+      - .env
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
-    environment:
-      - SQL_SERVER_HOST=sqlserver
-      - SQL_SERVER_USER=sa
-      - SQL_SERVER_PASSWORD=160305Encinas+
-      - ODOO_DB_HOST=db
+    # Quitamos la dependencia de sqlserver local
     depends_on:
-      - sqlserver
       - db
     networks:
       - crm-network
+
   frontend:
     image: node:20-alpine
     container_name: react_frontend

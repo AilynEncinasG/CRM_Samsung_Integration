@@ -1,9 +1,23 @@
+# --- SEGURIDAD (CRÍTICO) ---
+# Evita subir las credenciales de Somee y Secret Keys
+.env
+.env.shared
+.env.dev
+.env.prod
+web_samsung/.env
+
+# --- DOCKER ---
+# Datos persistentes de los contenedores
 odoo_data/
 odoo_db_data/
 mssql_data/
+postgres_data/
+.docker/
 
 # --- Odoo ---
 odoo_addons/
+# Ignorar archivos de configuración específicos de Odoo si contienen claves
+odoo.conf
 
 # --- Python / Django ---
 __pycache__/
@@ -12,13 +26,17 @@ __pycache__/
 .venv/
 venv/
 env/
+# Aunque usas SQL Server, ignoramos sqlite por si acaso
 db.sqlite3
-# Archivos de medios y estáticos recolectados
+db.sqlite3-journal
+# Archivos subidos por usuarios y archivos estáticos generados
 media/
+staticfiles/
 static/
 
 # --- React (Frontend) ---
 frontend/node_modules/
+frontend/dist/
 frontend/build/
 frontend/.env.local
 frontend/.env.development.local
@@ -34,5 +52,6 @@ yarn-error.log*
 Thumbs.db
 .idea/
 .vscode/
-
 *.tmp
+
+CRM/completo_samsung.sql
