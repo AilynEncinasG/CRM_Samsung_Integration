@@ -1,19 +1,20 @@
-version: '3.1'
-
 services:
-  # Base de datos para Odoo (Esta se queda porque Odoo la necesita local)
+  # Base de datos para Odoo (Mantenida local porque Odoo la requiere)
   db:
     image: postgres:15
+    container_name: crm-db-1
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD=odoo
       - POSTGRES_USER=odoo
     networks:
       - crm-network
+    restart: unless-stopped
 
-  # El sistema Odoo
+  # El sistema Odoo CRM
   odoo:
     image: odoo:17.0
+    container_name: crm-odoo-1
     depends_on:
       - db
     ports:
@@ -27,8 +28,9 @@ services:
       - PASSWORD=odoo
     networks:
       - crm-network
+    restart: unless-stopped
 
-  # --- DJANGO CONFIGURADO PARA SOMEE ---
+  # --- BACKEND DJANGO (CONECTADO AL DATA WAREHOUSE EN SOMEE) ---
   django:
     build: .
     container_name: django_app
@@ -39,12 +41,13 @@ services:
       - .:/code
     ports:
       - "8000:8000"
-    # Quitamos la dependencia de sqlserver local
     depends_on:
       - db
     networks:
       - crm-network
+    restart: unless-stopped
 
+  # --- FRONTEND REACT ---
   frontend:
     image: node:20-alpine
     container_name: react_frontend
@@ -62,6 +65,7 @@ services:
     tty: true
     networks:
       - crm-network
+    restart: unless-stopped
 
 networks:
   crm-network:

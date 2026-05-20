@@ -1,3 +1,4 @@
+# web_samsung/urls.py
 """
 URL configuration for web_samsung project.
 
@@ -19,11 +20,13 @@ from django.urls import path
 from .auth.login_views import login_view
 from .inventario.producto_views import get_samsung_products
 from .ventas.ventas_views import get_dw_sales_summary
-from .core.system_views import estado_sistema
+from .core.system_views import dashboard_stats, estado_sistema
 
 urlpatterns = [
     path('api/estado/', estado_sistema),
     path('api/login/', login_view),
+    path('api/auth/login/', login_view, name='login'),
     path('api/productos/', get_samsung_products),
     path('api/ventas-resumen/', get_dw_sales_summary),
+    path('api/core/dashboard-stats/', dashboard_stats, name='dashboard_stats'),
 ]

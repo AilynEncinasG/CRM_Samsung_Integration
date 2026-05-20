@@ -6,22 +6,27 @@ from rest_framework.decorators import api_view
 @api_view(['GET'])
 def get_dw_sales_summary(request):
     try:
-        # Forzamos el uso de la conexión al Data Warehouse
         with connections['dw_samsung'].cursor() as cursor:
-            # Tu consulta de BI
+            # Corregido: Fact_Ventas_Global e IngresoBruto según tu script OLAP
             cursor.execute("""
                 SELECT 
-                    ISNULL(SUM(MontoTotal), 0) as TotalVentas, 
+                    ISNULL(SUM(IngresoBruto), 0) as TotalVentas, 
                     COUNT(*) as TotalPedidos 
-                FROM Fact_Ventas
+                FROM Fact_Ventas_Global
             """)
             row = cursor.fetchone()
             
             data = {
-                "total_ventas": float(row[0]),
-                "total_pedidos": row[1],
+                "total_ventas": float(row[0]) if row[0] is not None else 0.0,
+                "total_productos": row[1] if row[1] is not None else 0, # Mapeado para las estadísticas de React
                 "status": "success"
             }
         return JsonResponse(data)
     except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        print(f"ERROR CRÍTICO EN DATA WAREHOUSE VENTAS: {e}")
+        return JsonResponse({
+            "total_ventas": 0.0,
+            "total_productos": 0,
+            "status": "error",
+            "message": str(e)
+        }, status=500)

@@ -55,3 +55,10 @@ Thumbs.db
 *.tmp
 
 CRM/completo_samsung.sql
+
+node_modules/
+frontend/node_modules/
+.venv/
+__pycache__/
+*.pyc
+.env

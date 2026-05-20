@@ -1,13 +1,29 @@
-// frontend/src/login/Login.jsx
 import React from 'react';
 import { loginStyles as s } from './LoginStyles';
 
-const Login = ({ setUsername, setPassword, handleLogin }) => {
+const Login = ({ setUsername, setPassword, handleLogin, loginError }) => { // <--- Agregamos loginError aquí
     return (
         <div style={s.container}>
             <div style={s.loginCard}>
                 <div style={s.logo}>SAMSUNG</div>
                 <div style={s.subtitle}>Business Intelligence Portal</div>
+                
+                {/* --- MENSAJE DE ERROR DINÁMICO --- */}
+                {loginError && (
+                    <div style={{ 
+                        backgroundColor: '#fee2e2', 
+                        color: '#ef4444', 
+                        padding: '10px', 
+                        borderRadius: '6px', 
+                        marginBottom: '15px', 
+                        fontSize: '13px',
+                        textAlign: 'center',
+                        fontWeight: '500',
+                        border: '1px solid #fca5a5'
+                    }}>
+                        {loginError}
+                    </div>
+                )}
                 
                 <form onSubmit={handleLogin}>
                     <input 
@@ -35,7 +51,6 @@ const Login = ({ setUsername, setPassword, handleLogin }) => {
             </div>
         </div>
     );
-    
 };
 
 export default Login;

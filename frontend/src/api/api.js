@@ -1,7 +1,9 @@
 // frontend/src/api/api.js
+import axios from 'axios';
+
 const BASE_URL = 'http://localhost:8000/api';
 
-// 1. Función para Login (Blindada)
+// 1. Función para Login nativo (Fetch)
 export const loginUser = async (username, password) => {
     try {
         const response = await fetch(`${BASE_URL}/login/`, {
@@ -9,13 +11,10 @@ export const loginUser = async (username, password) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
-
         if (!response.ok) {
-            // Si el status es 401, 404, 500, etc.
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error || `Error: ${response.status}`);
         }
-
         return await response.json();
     } catch (error) {
         console.error("Error en loginUser:", error);
@@ -23,7 +22,7 @@ export const loginUser = async (username, password) => {
     }
 };
 
-// 2. Función para Inventario (¡Asegúrate de que tenga el 'export'!)
+// 2. Función para Inventario (Fetch)
 export const getProductos = async () => {
     try {
         const response = await fetch(`${BASE_URL}/productos/`);
@@ -35,7 +34,7 @@ export const getProductos = async () => {
     }
 };
 
-// 3. Función para Ventas del DW (¡Asegúrate de que tenga el 'export'!)
+// 3. Función para Ventas del DW (Fetch)
 export const getVentasResumen = async () => {
     try {
         const response = await fetch(`${BASE_URL}/ventas-resumen/`);
@@ -46,3 +45,29 @@ export const getVentasResumen = async () => {
         throw error;
     }
 };
+
+
+// ==========================================
+// CONFIGURACIÓN DE AXIOS (Instancia unificada)
+// ==========================================
+
+const api = axios.create({
+    baseURL: BASE_URL, // <--- CORREGIDO: Antes decía API_URL y causaba error
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});
+
+// Petición de Login alterna por Axios
+export const login = async (username, password) => {
+    const response = await api.post('/auth/login/', { username, password });
+    return response.data;
+};
+
+// NUEVA: Petición para obtener las estadísticas del Dashboard usando Axios
+export const getDashboardStats = async () => {
+    const response = await api.get('/core/dashboard-stats/');
+    return response.data;
+};
+
+export default api;
